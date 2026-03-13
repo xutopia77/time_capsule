@@ -608,8 +608,8 @@ A：请检查：
 
 如遇到问题或有相关建议，请通过以下方式联系我们：
 
-- **官方网站**：[TimeTidy](https://xutopia77.github.io/page/TimeTidy)
-- **下载地址**：[record-manager-latest-win.zip](https://github.com/xutopia77/time_capsule/releases/download/latest/record-manager-latest-win.zip)
+- **官方网站**：[TimeTidy](https://xutopia77.github.io/project/TimeTidy)
+- **下载地址**：[time_capsule-latest-win.zip](https://github.com/xutopia77/time_capsule/releases/download/latest/time_capsule-latest-win.zip)
 - **问题反馈**：[提交 Issue 至项目仓库](https://github.com/xutopia77/time_capsule/issues)
 
 ### 文档资源

@@ -1,3 +1,5 @@
+[English](doc/README-en.md)  |  [简体中文](doc/README-zh.md)
+
 # Time Capsule User Manual
 
 ## 📖 Table of Contents
@@ -608,8 +610,8 @@ A: Please check:
 
 If you encounter problems or have related suggestions, please contact us through the following methods:
 
-- **Official Website**: [TimeTidy](https://xutopia77.github.io/page/TimeTidy)
-- **Download Address**: [record-manager-latest-win.zip](https://github.com/xutopia77/time_capsule/releases/download/latest/record-manager-latest-win.zip)
+- **Official Website**: [TimeTidy](https://xutopia77.github.io/project/TimeTidy)
+- **Download Address**: [time_capsule-latest-win.zip](https://github.com/xutopia77/time_capsule/releases/download/latest/time_capsule-latest-win.zip)
 - **Issue Feedback**: [Submit Issue to Project Repository](https://github.com/xutopia77/time_capsule/issues)
 
 ### Documentation Resources
