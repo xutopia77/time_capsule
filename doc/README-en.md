@@ -92,7 +92,7 @@ Double-click the Time Capsule executable to launch the program. The settings int
 
 **Repository**: Original path to store image/video files. It is recommended to choose a storage location with sufficient capacity and fast read/write speed.
 
-![Project Settings](doc/image/README/en_admin_set.jpg)
+![Project Settings](image/README/en_admin_set.jpg)
 
 ### 3. Sync Project
 
@@ -105,8 +105,8 @@ After successfully creating the project, click the "Sync Project" button to star
 
 After synchronization is complete, you can return to the main page to browse and preview files.
 
-![Home Page - Folders](doc/image/README/en_home_folder.jpg)
-![Home Page](doc/image/README/en_home.jpg)
+![Home Page - Folders](image/README/en_home_folder.jpg)
+![Home Page](image/README/en_home.jpg)
 
 ### 4. Project Management
 

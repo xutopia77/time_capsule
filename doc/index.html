@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Capsule - Intelligent Media File Management System</title>
+    <meta name="description" content="Time Capsule is a professional image and video management tool designed to help users efficiently organize and browse multimedia files.">
+    <meta name="keywords" content="image management, video management, file management, tag system, similarity detection, file deduplication">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #0a0e27;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            padding: 20px 0;
+            border-bottom: 1px solid #2a2f4a;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            color: #8888aa;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-menu li a {
+            color: #a0a0c0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu li a:hover {
+            color: #667eea;
+        }
+
+        .language-selector {
+            position: relative;
+        }
+
+        .language-btn {
+            background: #1a1f3a;
+            color: #a0a0c0;
+            border: 1px solid #2a2f4a;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn:hover {
+            border-color: #667eea;
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #1a1f3a;
+            border: 1px solid #2a2f4a;
+            border-radius: 5px;
+            margin-top: 5px;
+            min-width: 120px;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .language-dropdown.show {
+            display: block;
+        }
+
+        .language-dropdown button {
+            width: 100%;
+            background: none;
+            border: none;
+            color: #a0a0c0;
+            padding: 10px 15px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .language-dropdown button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .language-dropdown button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #8888aa;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: #0d1229;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 60px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: #1a1f3a;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #2a2f4a;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #8888aa;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* System Requirements */
+        .requirements {
+            padding: 80px 0;
+            background: #0a0e27;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .requirement-card {
+            background: #1a1f3a;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #2a2f4a;
+        }
+
+        .requirement-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #2a2f4a;
+        }
+
+        .requirement-card ul {
+            list-style: none;
+        }
+
+        .requirement-card li {
+            color: #a0a0c0;
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .requirement-card li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+
+        /* Interface Preview */
+        .preview {
+            padding: 80px 0;
+            background: #0d1229;
+        }
+
+        .preview-content {
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #2a2f4a;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            margin: 30px 0;
+        }
+
+        .preview-caption {
+            color: #8888aa;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        /* Download Section */
+        .download {
+            padding: 80px 0;
+            background: #0a0e27;
+            text-align: center;
+        }
+
+        .version-info {
+            background: #1a1f3a;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #2a2f4a;
+            display: inline-block;
+            margin: 30px 0;
+        }
+
+        .version-info p {
+            color: #a0a0c0;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .version-info strong {
+            color: #667eea;
+        }
+
+        /* Footer */
+        footer {
+            background: #050817;
+            padding: 40px 0;
+            border-top: 1px solid #1a1f3a;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            color: #8888aa;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #667eea;
+        }
+
+        .footer-copyright {
+            color: #666688;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .hero h2 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">TC</div>
+                    <div class="logo-text">
+                        <h1 data-i18n="app.name">Time Capsule</h1>
+                        <p data-i18n="app.tagline">Intelligent Media Management</p>
+                    </div>
+                </div>
+
+                <ul class="nav-menu">
+                    <li><a href="#features" data-i18n="nav.features">Features</a></li>
+                    <li><a href="#requirements" data-i18n="nav.requirements">System Requirements</a></li>
+                    <li><a href="#preview" data-i18n="nav.preview">Interface Preview</a></li>
+                    <li><a href="#download" data-i18n="nav.download">Download</a></li>
+                </ul>
+
+                <div class="language-selector">
+                    <button class="language-btn" id="languageBtn">
+                        <span id="currentLang">English</span> ▼
+                    </button>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <button class="lang-option active" data-lang="en">English</button>
+                        <button class="lang-option" data-lang="zh">中文</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2 data-i18n="hero.title">Professional Image & Video Management Tool</h2>
+            <p data-i18n="hero.description">A desktop application designed for efficient multimedia file organization, providing core functions such as intelligent file classification, tag management, similarity detection, and metadata extraction.</p>
+            <a href="https://github.com/xutopia77/time_capsule/releases/download/latest/record-manager-latest-win.zip" class="download-btn" data-i18n="hero.download">Download Now</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title" data-i18n="features.title">Core Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📁</div>
+                    <h3 data-i18n="features.fileManagement.title">File Management</h3>
+                    <p data-i18n="features.fileManagement.description">Intuitive file browsing interface with tree view, grid view, and list view. Support for file operations including copy, move, and safe delete with recycle bin mechanism.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🏷️</div>
+                    <h3 data-i18n="features.tagSystem.title">Tag System</h3>
+                    <p data-i18n="features.tagSystem.description">Powerful tag management system supporting custom tags, multi-tag combinations, and tag statistics. Organize files by theme, time, location, or status.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 data-i18n="features.advancedSearch.title">Advanced Search</h3>
+                    <p data-i18n="features.advancedSearch.description">Multi-condition combination search supporting filename, tags, file type, date range, and file size filters. Real-time search results with sorting options.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3 data-i18n="features.similarityDetection.title">Similarity Detection</h3>
+                    <p data-i18n="features.similarityDetection.description">Intelligent duplicate file detection based on content analysis. Automatic grouping, similarity sorting, and side-by-side preview comparison.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 data-i18n="features.metadataManagement.title">Metadata Management</h3>
+                    <p data-i18n="features.metadataManagement.description">Automatic EXIF information extraction including shooting time, GPS location, camera model, and shooting parameters for comprehensive file analysis.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 data-i18n="features.realtimeUpdates.title">Real-time Updates</h3>
+                    <p data-i18n="features.realtimeUpdates.description">Server-Sent Events (SSE) technology for real-time file list updates, task progress notifications, and system status synchronization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Requirements -->
+    <section class="requirements" id="requirements">
+        <div class="container">
+            <h2 class="section-title" data-i18n="requirements.title">System Requirements</h2>
+            <div class="requirements-grid">
+                <div class="requirement-card">
+                    <h3 data-i18n="requirements.os.title">Operating System</h3>
+                    <ul>
+                        <li data-i18n="requirements.os.win7">Microsoft Windows 7 (64-bit)</li>
+                        <li data-i18n="requirements.os.win10">Microsoft Windows 10 (64-bit)</li>
+                        <li data-i18n="requirements.os.win11">Microsoft Windows 11 (64-bit)</li>
+                    </ul>
+                </div>
+
+                <div class="requirement-card">
+                    <h3 data-i18n="requirements.hardware.title">Hardware Requirements</h3>
+                    <ul>
+                        <li data-i18n="requirements.hardware.cpu">CPU: Intel Core i3 or equivalent</li>
+                        <li data-i18n="requirements.hardware.memory">Memory: 4GB RAM (8GB recommended)</li>
+                        <li data-i18n="requirements.hardware.storage">Storage: At least 1GB free space</li>
+                        <li data-i18n="requirements.hardware.gpu">GPU: DirectX 9.0 or higher</li>
+                    </ul>
+                </div>
+
+                <div class="requirement-card">
+                    <h3 data-i18n="requirements.installation.title">Installation</h3>
+                    <ul>
+                        <li data-i18n="requirements.installation.green">Green installation-free deployment</li>
+                        <li data-i18n="requirements.installation.run">Run directly after extraction</li>
+                        <li data-i18n="requirements.installation.noRuntime">No database or runtime required</li>
+                        <li data-i18n="requirements.installation.autoConfig">Auto-create default project configuration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interface Preview -->
+    <section class="preview" id="preview">
+        <div class="container">
+            <h2 class="section-title" data-i18n="preview.title">Interface Preview</h2>
+            <div class="preview-content">
+                <img src="en_home.jpg" alt="Main Interface" class="preview-image">
+                <p class="preview-caption" data-i18n="preview.caption">Main interface overview - Complete media management control center</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="download" id="download">
+        <div class="container">
+            <h2 class="section-title" data-i18n="download.title">Get Software</h2>
+            <div class="version-info">
+                <p data-i18n="download.version">Current version: <strong>v6.0.1</strong> | Release date: <strong>March 2024</strong></p>
+            </div>
+            <a href="https://github.com/xutopia77/time_capsule/releases/download/latest/record-manager-latest-win.zip" class="download-btn" data-i18n="download.button">Download for Windows</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="https://github.com/xutopia77/time_capsule" target="_blank">GitHub</a>
+                    <a href="https://github.com/xutopia77/time_capsule/issues" target="_blank">Issues</a>
+                    <a href="https://github.com/xutopia77/time_capsule/discussions" target="_blank">Discussions</a>
+                    <a href="https://xutopia77.github.io/page/TimeTidy" target="_blank">Website</a>
+                </div>
+                <div class="footer-copyright" data-i18n="footer.copyright">
+                    © 2024 Time Capsule. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // i18n translations
+        const translations = {
+            en: {
+                app: {
+                    name: 'Time Capsule',
+                    tagline: 'Intelligent Media Management'
+                },
+                nav: {
+                    features: 'Features',
+                    requirements: 'System Requirements',
+                    preview: 'Interface Preview',
+                    download: 'Download'
+                },
+                hero: {
+                    title: 'Professional Image & Video Management Tool',
+                    description: 'A desktop application designed for efficient multimedia file organization, providing core functions such as intelligent file classification, tag management, similarity detection, and metadata extraction.',
+                    download: 'Download Now'
+                },
+                features: {
+                    title: 'Core Features',
+                    fileManagement: {
+                        title: 'File Management',
+                        description: 'Intuitive file browsing interface with tree view, grid view, and list view. Support for file operations including copy, move, and safe delete with recycle bin mechanism.'
+                    },
+                    tagSystem: {
+                        title: 'Tag System',
+                        description: 'Powerful tag management system supporting custom tags, multi-tag combinations, and tag statistics. Organize files by theme, time, location, or status.'
+                    },
+                    advancedSearch: {
+                        title: 'Advanced Search',
+                        description: 'Multi-condition combination search supporting filename, tags, file type, date range, and file size filters. Real-time search results with sorting options.'
+                    },
+                    similarityDetection: {
+                        title: 'Similarity Detection',
+                        description: 'Intelligent duplicate file detection based on content analysis. Automatic grouping, similarity sorting, and side-by-side preview comparison.'
+                    },
+                    metadataManagement: {
+                        title: 'Metadata Management',
+                        description: 'Automatic EXIF information extraction including shooting time, GPS location, camera model, and shooting parameters for comprehensive file analysis.'
+                    },
+                    realtimeUpdates: {
+                        title: 'Real-time Updates',
+                        description: 'Server-Sent Events (SSE) technology for real-time file list updates, task progress notifications, and system status synchronization.'
+                    }
+                },
+                requirements: {
+                    title: 'System Requirements',
+                    os: {
+                        title: 'Operating System',
+                        win7: 'Microsoft Windows 7 (64-bit)',
+                        win10: 'Microsoft Windows 10 (64-bit)',
+                        win11: 'Microsoft Windows 11 (64-bit)'
+                    },
+                    hardware: {
+                        title: 'Hardware Requirements',
+                        cpu: 'CPU: Intel Core i3 or equivalent',
+                        memory: 'Memory: 4GB RAM (8GB recommended)',
+                        storage: 'Storage: At least 1GB free space',
+                        gpu: 'GPU: DirectX 9.0 or higher'
+                    },
+                    installation: {
+                        title: 'Installation',
+                        green: 'Green installation-free deployment',
+                        run: 'Run directly after extraction',
+                        noRuntime: 'No database or runtime required',
+                        autoConfig: 'Auto-create default project configuration'
+                    }
+                },
+                preview: {
+                    title: 'Interface Preview',
+                    caption: 'Main interface overview - Complete media management control center'
+                },
+                download: {
+                    title: 'Get Software',
+                    version: 'Current version: <strong>v6.0.1</strong> | Release date: <strong>March 2024</strong>',
+                    button: 'Download for Windows'
+                },
+                footer: {
+                    copyright: '© 2024 Time Capsule. All rights reserved.'
+                }
+            },
+            zh: {
+                app: {
+                    name: 'Time Capsule',
+                    tagline: '智能媒体管理'
+                },
+                nav: {
+                    features: '核心功能',
+                    requirements: '系统要求',
+                    preview: '界面预览',
+                    download: '下载'
+                },
+                hero: {
+                    title: '专业的图片与视频管理工具',
+                    description: '专为高效多媒体文件组织而设计的桌面应用程序，提供智能文件分类、标签管理、相似度检测和元数据提取等核心功能。',
+                    download: '立即下载'
+                },
+                features: {
+                    title: '核心功能',
+                    fileManagement: {
+                        title: '文件管理',
+                        description: '直观的文件浏览界面，支持树形视图、网格视图和列表视图。支持复制、移动和安全删除（回收站机制）等文件操作。'
+                    },
+                    tagSystem: {
+                        title: '标签系统',
+                        description: '强大的标签管理系统，支持自定义标签、多标签组合和标签统计。可按主题、时间、地点或状态组织文件。'
+                    },
+                    advancedSearch: {
+                        title: '高级搜索',
+                        description: '支持文件名、标签、文件类型、日期范围和文件大小筛选的多条件组合搜索。实时搜索结果，支持排序选项。'
+                    },
+                    similarityDetection: {
+                        title: '相似度检测',
+                        description: '基于内容分析的智能重复文件检测。自动分组、相似度排序和并排预览对比。'
+                    },
+                    metadataManagement: {
+                        title: '元信息管理',
+                        description: '自动提取EXIF信息，包括拍摄时间、GPS位置、相机型号和拍摄参数，进行全面文件分析。'
+                    },
+                    realtimeUpdates: {
+                        title: '实时更新',
+                        description: '采用服务器发送事件（SSE）技术，实现文件列表实时更新、任务进度通知和系统状态同步。'
+                    }
+                },
+                requirements: {
+                    title: '系统要求',
+                    os: {
+                        title: '操作系统',
+                        win7: 'Microsoft Windows 7 (64位)',
+                        win10: 'Microsoft Windows 10 (64位)',
+                        win11: 'Microsoft Windows 11 (64位)'
+                    },
+                    hardware: {
+                        title: '硬件要求',
+                        cpu: 'CPU: Intel Core i3 或同等性能处理器',
+                        memory: '内存: 4GB RAM（推荐8GB）',
+                        storage: '存储: 至少1GB可用空间',
+                        gpu: 'GPU: DirectX 9.0 或更高版本'
+                    },
+                    installation: {
+                        title: '安装',
+                        green: '绿色免安装部署',
+                        run: '解压后直接运行',
+                        noRuntime: '无需数据库或运行时环境',
+                        autoConfig: '自动创建默认项目配置'
+                    }
+                },
+                preview: {
+                    title: '界面预览',
+                    caption: '主界面概览 - 完整的媒体管理控制中心'
+                },
+                download: {
+                    title: '获取软件',
+                    version: '当前版本：<strong>v6.0.1</strong> | 发布日期：<strong>2024年3月</strong>',
+                    button: '下载 Windows 版本'
+                },
+                footer: {
+                    copyright: '© 2024 Time Capsule. 保留所有权利。'
+                }
+            }
+        };
+
+        // Current language (default: English)
+        let currentLanguage = 'en';
+
+        // Get nested object value by path
+        function getValue(obj, path) {
+            return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+        }
+
+        // Update all translatable elements
+        function updateLanguage(lang) {
+            currentLanguage = lang;
+            const elements = document.querySelectorAll('[data-i18n]');
+            
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const translation = getValue(translations[lang], key);
+                
+                if (translation) {
+                    element.innerHTML = translation;
+                }
+            });
+
+            // Update language button text
+            const langNames = {
+                en: 'English',
+                zh: '中文'
+            };
+            document.getElementById('currentLang').textContent = langNames[lang];
+
+            // Update active state in dropdown
+            document.querySelectorAll('.lang-option').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+
+            // Update page title
+            const titleKey = 'app.name';
+            const title = getValue(translations[lang], titleKey);
+            document.title = title + ' - Intelligent Media File Management System';
+        }
+
+        // Language dropdown toggle
+        const languageBtn = document.getElementById('languageBtn');
+        const languageDropdown = document.getElementById('languageDropdown');
+
+        languageBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            languageDropdown.classList.remove('show');
+        });
+
+        // Language selection
+        document.querySelectorAll('.lang-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                const lang = e.target.getAttribute('data-lang');
+                updateLanguage(lang);
+            });
+        });
+
+        // Initialize with English
+        updateLanguage('en');
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll animation to feature cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
